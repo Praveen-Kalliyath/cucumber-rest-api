@@ -1,0 +1,267 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>Cucumber</groupId>
+	<artifactId>Cucumber</artifactId>
+	<version>0.0.1</version>
+
+	<properties>
+		<source.version>1.8</source.version>
+		<target.version>1.8</target.version>
+
+		<maven.compiler.version>3.8.1</maven.compiler.version>
+		<maven.clean.version>3.1.0</maven.clean.version>
+		<maven.surefire.version>3.0.0-M5</maven.surefire.version>
+
+		<cucumber.version>6.4.0</cucumber.version>
+
+		<restassured.version>4.3.1</restassured.version>
+		<jayway.version>2.4.0</jayway.version>
+
+		<commonsconfig.version>1.10</commonsconfig.version>
+
+		<extentreport.version>3.1.5</extentreport.version>
+		<log4j.version>1.2.17</log4j.version>
+
+		<commons.io.version>2.7</commons.io.version>
+	</properties>
+
+	<dependencies>
+		<!-- CUCUMBER IO -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-testng</artifactId>
+			<version>${cucumber.version}</version>
+		</dependency>
+
+		<!--REST ASSURED UTILS -->
+		<!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${restassured.version}</version>
+			<!-- <scope>test</scope> -->
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/io.rest-assured/json-path -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>json-path</artifactId>
+			<version>${restassured.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/io.rest-assured/xml-path -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>xml-path</artifactId>
+			<version>${restassured.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/io.rest-assured/json-schema-validator -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>json-schema-validator</artifactId>
+			<version>${restassured.version}</version>
+		</dependency>
+
+		<!-- JSON UPDATE -->
+		<!-- https://mvnrepository.com/artifact/com.jayway.jsonpath/json-path -->
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<version>${jayway.version}</version>
+		</dependency>
+
+		<!-- WRITE KEY, VALUE TO PROPERTIES FILE -->
+		<!-- https://mvnrepository.com/artifact/commons-configuration/commons-configuration -->
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>${commonsconfig.version}</version>
+		</dependency>
+
+		<!-- REPORTING -->
+		<!-- https://mvnrepository.com/artifact/com.aventstack/extentreports -->
+		<dependency>
+			<groupId>com.aventstack</groupId>
+			<artifactId>extentreports</artifactId>
+			<version>${extentreport.version}</version>
+		</dependency>
+
+		<!-- LOGGING -->
+		<!-- https://mvnrepository.com/artifact/log4j/log4j -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons.io.version}</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<plugins>
+			<plugin>
+				<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.version}</version>
+				<configuration>
+					<source>${source.version}</source>
+					<target>${target.version}</target>
+				</configuration>
+			</plugin>
+
+			<!--Maven Surefire Build -->
+			<plugin>
+				<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven.surefire.version}</version>
+				<configuration>
+					<skipTests>false</skipTests>
+					<argLine>-Xmx1024m</argLine>
+					<failIfNoTests>false</failIfNoTests>
+					<testFailureIgnore>true</testFailureIgnore>
+					<systemPropertyVariables>
+						<envName>${envName}</envName>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
+
+			<!--Maven Clean -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>${maven.clean.version}</version>
+				<executions>
+					<execution>
+						<id>Deleting all files under target folder but not target itself</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<excludeDefaultDirectories>true</excludeDefaultDirectories>
+					<filesets>
+						<fileset>
+							<directory>target</directory>
+							<followSymlinks>false</followSymlinks>
+							<includes>
+								<include>**/*</include>
+							</includes>
+						</fileset>
+						<fileset>
+							<directory>target-output</directory>
+							<followSymlinks>false</followSymlinks>
+							<includes>
+								<include>**/*</include>
+							</includes>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>XmlRun</id>
+			<build>
+				<plugins>
+
+					<!--Maven Compile -->
+					<plugin>
+						<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>${maven.compiler.version}</version>
+						<configuration>
+							<source>${source.version}</source>
+							<target>${target.version}</target>
+						</configuration>
+					</plugin>
+
+					<!--Maven Surefire Build -->
+					<plugin>
+						<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>${maven.surefire.version}</version>
+						<configuration>
+							<skipTests>false</skipTests>
+							<argLine>-Xmx1024m</argLine>
+							<failIfNoTests>false</failIfNoTests>
+							<testFailureIgnore>true</testFailureIgnore>
+							<suiteXmlFiles>
+								<suiteXmlFile>${xmlFileName}</suiteXmlFile>
+							</suiteXmlFiles>
+
+							<systemPropertyVariables>
+								<envName>${envName}</envName>
+							</systemPropertyVariables>
+						</configuration>
+					</plugin>
+
+					<!--Maven Clean -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+						<version>${maven.clean.version}</version>
+						<executions>
+							<execution>
+								<id>Deleting all files under target folder but not target itself</id>
+								<phase>clean</phase>
+								<goals>
+									<goal>clean</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<excludeDefaultDirectories>true</excludeDefaultDirectories>
+							<filesets>
+								<fileset>
+									<directory>target</directory>
+									<followSymlinks>false</followSymlinks>
+									<includes>
+										<include>**/*</include>
+									</includes>
+								</fileset>
+								<fileset>
+									<directory>target-output</directory>
+									<followSymlinks>false</followSymlinks>
+									<includes>
+										<include>**/*</include>
+									</includes>
+								</fileset>
+								<fileset>
+									<directory>execution-result</directory>
+									<followSymlinks>false</followSymlinks>
+									<includes>
+										<include>**/*</include>
+									</includes>
+								</fileset>
+							</filesets>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>
